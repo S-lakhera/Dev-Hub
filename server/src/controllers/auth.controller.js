@@ -1,7 +1,7 @@
 const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const tokenService = require('../services/tokenServices');
+const tokenService = require('../services/token.service');
 
 const setCookies = (res, accessToken, refreshToken) => {
     res.cookie('accessToken', accessToken, {

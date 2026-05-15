@@ -1,4 +1,4 @@
-const tokenService = require('../services/tokenService');
+const tokenService = require('../services/token.service');
 const User = require('../models/user.model');
 
 const protect = async (req, res, next) => {

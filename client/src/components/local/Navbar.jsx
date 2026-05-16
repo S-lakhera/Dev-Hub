@@ -10,25 +10,25 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { LogOut, User, LayoutDashboard, PlusCircle } from "lucide-react";
 import { AuthContext } from "../../context/AuthContext";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   const { user, setUser } = useContext(AuthContext);
 
   const handleLogout = () => {
-    // Backend logout api call here later
     setUser(null);
   };
 
   return (
-    <nav className="border-b bg-white sticky top-0 z-50">
+    <nav className="border-b bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 sticky top-0 z-50 transition-colors duration-200">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-primary">
+        <Link to="/" className="text-2xl font-bold text-primary dark:text-white">
           DevHub
         </Link>
 
-        {/* Action Buttons */}
         <div className="flex items-center gap-4">
+          <ThemeToggle/>
           {user ? (
             <>
               <Link to="/upload">

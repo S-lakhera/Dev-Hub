@@ -88,9 +88,11 @@ const loginUser = async (req, res) => {
             // Set the cookies 
             setCookies(res, accessToken, refreshToken);
 
+            const { password, ...safeUser } = user.toObject();
+
             res.json({
                 message: "Login successful",
-                user: { _id: user._id, name: user.name, email: user.email }
+                user: safeUser
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -102,16 +104,26 @@ const loginUser = async (req, res) => {
 
 // Log out user
 const logoutUser = async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
+    try {
+        const refreshToken = req.cookies.refreshToken;
 
-    if (refreshToken) {
-        await User.findOneAndUpdate({ refreshToken }, { refreshToken: "" });
+        if (refreshToken) {
+            await User.findOneAndUpdate({ refreshToken }, { $set: { refreshToken: "" } });
+        }
+
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict"
+        };
+
+        res.clearCookie('accessToken', cookieOptions);
+        res.clearCookie('refreshToken', cookieOptions);
+
+        return res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
-
-    res.json({ message: "Logged out successfully" });
 };
 
 module.exports = {

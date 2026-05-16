@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Terminal, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa"; // React Icons use kiya for GitHub
+import { Link } from "react-router";
 
 const ProjectFeed = () => {
   const {
@@ -63,7 +64,7 @@ const ProjectFeed = () => {
                   className="w-full h-60 object-cover"
                 />
               </CardHeader>
-              
+
               <CardContent className="flex-1 p-4 space-y-3">
                 <CardTitle className="text-xl font-bold text-slate-900 dark:text-slate-50 line-clamp-1">
                   {project.title}
@@ -71,7 +72,7 @@ const ProjectFeed = () => {
                 <p className="text-muted-foreground dark:text-slate-400 text-sm line-clamp-2 leading-relaxed">
                   {project.description}
                 </p>
-                
+
                 {/* Tech Stack Badges */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {project.techStack?.map((tech, idx) => (
@@ -84,17 +85,20 @@ const ProjectFeed = () => {
 
               <CardFooter className="p-4 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between mt-auto transition-colors duration-200">
                 {/* Author Info */}
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-7 w-7 border border-slate-200 dark:border-slate-700">
+                <Link
+                  to={`/profile/${project.owner?._id}`}
+                  className="flex items-center gap-2 group hover:opacity-80 transition-opacity"
+                >
+                  <Avatar className="h-7 w-7 border border-slate-200 dark:border-slate-700 group-hover:border-primary transition-colors">
                     <AvatarImage src={project.owner?.profilePicture} />
                     <AvatarFallback className="dark:bg-slate-800 dark:text-slate-300 text-xs">
                       {project.owner?.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 line-clamp-1">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors line-clamp-1">
                     {project.owner?.name}
                   </span>
-                </div>
+                </Link>
 
                 {/* External Links */}
                 <div className="flex gap-1">

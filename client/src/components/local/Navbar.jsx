@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "../ui/button";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { LogOut, User, LayoutDashboard, PlusCircle } from "lucide-react";
@@ -13,10 +13,12 @@ import { AuthContext } from "../../context/AuthContext";
 import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(null);
+  const handleLogout = async() => {
+    await logout()
+    navigate("/login")
   };
 
   return (
@@ -28,7 +30,7 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-4">
-          <ThemeToggle/>
+          <ThemeToggle />
           {user ? (
             <>
               <Link to="/upload">
@@ -44,17 +46,24 @@ const Navbar = () => {
                     <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem className="gap-2">
-                    <User size={16} /> Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2">
+
+                <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-slate-900 border dark:border-slate-800">
+                  
+                  <Link to={`/profile/${user._id}`}>
+                    <DropdownMenuItem className="gap-2 cursor-pointer text-slate-700 dark:text-slate-300">
+                      <User size={16} /> Profile
+                    </DropdownMenuItem>
+                  </Link>
+
+                  <DropdownMenuItem className="gap-2 cursor-pointer text-slate-700 dark:text-slate-300">
                     <LayoutDashboard size={16} /> My Projects
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout} className="gap-2 text-destructive">
+
+                  <DropdownMenuItem onClick={handleLogout} className="gap-2 cursor-pointer text-destructive">
                     <LogOut size={16} /> Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
+
               </DropdownMenu>
             </>
           ) : (

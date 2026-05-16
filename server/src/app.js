@@ -11,7 +11,7 @@ const blogRoutes = require('./routes/blog.routes')
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
-    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }))
 app.use(cookieParser())

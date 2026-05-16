@@ -5,8 +5,8 @@ import Signup from "../features/auth/components/Signup";
 import ProtectedRoute from "./ProtectedRoute";
 import ProjectFeed from "../features/projects/components/ProjectFeed";
 import ProjectUpload from "../features/projects/components/ProjectUpload";
+import DeveloperProfile from "../features/profile/components/DeveloperProfile";
 
-const ProfilePlaceholder = () => <div className="p-8 font-semibold">Developer Profile Coming...</div>;
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile/:id",
-        element: <ProfilePlaceholder />
+        element: <DeveloperProfile />
       },
       {
         path: "upload",

@@ -25,8 +25,14 @@ const updateProfile = async (req, res) => {
         let updateData = { ...req.body };
 
         if (req.file) {
-            const imageUrl = await uploadToImageKit(req.file.buffer, `profile-${req.user.id}`);
-            updateData.profilePicture = imageUrl;
+            try {
+                const imageUrl = await uploadToImageKit(req.file.buffer, `profile-${req.user.id}`);
+                updateData.profilePicture = imageUrl;
+            }
+            catch(err){
+                console.error('Image upload error:', err);
+                return res.status(500).json({ message: 'Profile upload failed' });
+            }
         }
 
         const user = await User.findByIdAndUpdate(
@@ -57,7 +63,7 @@ const getAllDevelopers = async (req, res) => {
 
         const developers = await User.find(query)
             .select("-password")
-            .sort({ createdAt: -1 }); 
+            .sort({ createdAt: -1 });
 
         res.json(developers);
     } catch (error) {

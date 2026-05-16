@@ -1,14 +1,31 @@
 const Project = require('../models/project.model');
+const { uploadToImageKit } = require('../services/imageKit.service');
 
 const createProject = async (req, res) => {
     try {
-        const { title, description, thumbnail, techStack, githubLink, liveLink } = req.body;
+        if (req.body.techStack) {
+            req.body.techStack = JSON.parse(req.body.techStack);
+        }
+
+        const { title, description, techStack, githubLink, liveLink } = req.body;
+
+        let thumbnailUrl = req.body.thumbnail || null;
+
+        if (req.file) {
+            const fileName = `${Date.now()}_${req.file.originalname}`;
+            try {
+                thumbnailUrl = await uploadToImageKit(req.file.buffer, fileName);
+            } catch (err) {
+                console.error('Image upload error:', err);
+                return res.status(500).json({ message: 'Thumbnail upload failed' });
+            }
+        }
 
         const project = await Project.create({
             owner: req.user.id,
             title,
             description,
-            thumbnail,
+            thumbnail: thumbnailUrl,
             techStack,
             githubLink,
             liveLink
@@ -96,10 +113,10 @@ const getAllProjects = async (req, res) => {
     }
 };
 
-module.exports = { 
-    createProject, 
-    getMyProjects, 
-    deleteProject, 
+module.exports = {
+    createProject,
+    getMyProjects,
+    deleteProject,
     updateProject,
     getAllProjects
 };

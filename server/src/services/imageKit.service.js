@@ -22,6 +22,6 @@ const uploadToImageKit = async (fileBuffer, fileName) => {
     } catch (error) {
         throw new Error("Image upload failed");
     }
-};
+}; 
 
 module.exports = { upload, uploadToImageKit };
